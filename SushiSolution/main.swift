@@ -95,7 +95,6 @@ extension Queue: CustomStringConvertible {
 func solution() {
     struct Restaurant {
         let number: Int
-        let adjacent: [Int]
         let previousRestaurant: Int
         let traveledRestaurants: Set<Int>
         let travelTime: Int
@@ -103,12 +102,13 @@ func solution() {
     
     let firstLine = readLine()!.split(separator: " ").map { Int($0) }
     let numOfN = firstLine[0]!
-    let numOfM = firstLine[1]!
     let indexesOfM: [Int] = readLine()!.split(separator: " ").map { Int($0)! }
     
     var smallestTravelTime = 2 * numOfN
+    let emptySet: Set<Int> = []
     
     var paths = [[Int]](repeating: [Int](repeating: 0, count: 0), count: numOfN)
+    
     
     for _ in 1..<numOfN {
         let pathInput = readLine()!.split(separator: " ").map { Int($0) }
@@ -119,16 +119,17 @@ func solution() {
     func findSmallestTravelTime(startRestaurant: Restaurant) {
         let q = Queue<Restaurant>()
         q.enqueue(item: startRestaurant)
+        var numberOfTimesPassed = [Int](repeating: 0, count: numOfN)
         
         while !q.isEmpty() {
-            
             let sq = q.dequeue()!
             let number = sq.number
-            let adjacentRestaurants: [Int] = sq.adjacent
+            let adjacentRestaurants: [Int] = paths[number]
             let previousReataurant: Int = sq.previousRestaurant
             var traveledRestaurants: Set<Int> = sq.traveledRestaurants
             let travelTime = sq.travelTime
             traveledRestaurants.insert(number)
+            numberOfTimesPassed[number] += 1
             
             if travelTime > smallestTravelTime {
                 break
@@ -145,13 +146,15 @@ func solution() {
                 if adjacentRestaurantNumber == previousReataurant && adjacentRestaurants.count > 1 {
                     continue
                 }
-                q.enqueue(item: Restaurant(number: adjacentRestaurantNumber, adjacent: paths[adjacentRestaurantNumber], previousRestaurant: number, traveledRestaurants: traveledRestaurants, travelTime: travelTime + 1))
+                if numberOfTimesPassed[i] > paths[i].count {
+                    continue
+                }
+                q.enqueue(item: Restaurant(number: adjacentRestaurantNumber, previousRestaurant: number, traveledRestaurants: traveledRestaurants, travelTime: travelTime + 1))
             }
         }
     }
     for restaurant in indexesOfM {
-        let emptySet: Set<Int> = []
-        findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, adjacent: paths[restaurant], previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
+        findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
     }
     print(smallestTravelTime)
 }
@@ -164,5 +167,6 @@ func containsAll(array: [Int], set: Set<Int>) -> Bool {
     }
     return true
 }
+
 
 solution()
