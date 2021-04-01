@@ -105,7 +105,6 @@ func solution() {
     let indexesOfM: [Int] = readLine()!.split(separator: " ").map { Int($0)! }
     
     var smallestTravelTime = 2 * numOfN
-    let emptySet: Set<Int> = []
     
     var paths = [[Int]](repeating: [Int](repeating: 0, count: 0), count: numOfN)
     
@@ -115,6 +114,8 @@ func solution() {
         paths[pathInput[0]!].append(pathInput[1]!)
         paths[pathInput[1]!].append(pathInput[0]!)
     }
+    
+//    print(paths)
     
     func findSmallestTravelTime(startRestaurant: Restaurant) {
         let q = Queue<Restaurant>()
@@ -131,16 +132,22 @@ func solution() {
             traveledRestaurants.insert(number)
             numberOfTimesPassed[number] += 1
             
-            if travelTime > smallestTravelTime {
-                break
-            }
-            if traveledRestaurants.count == numOfN {
-                break
-            }
+            
+            
+//            print("indexesOfM \(indexesOfM)")
+//            print("traveledRestaurants \(traveledRestaurants)")
             if containsAll(array: indexesOfM, set: traveledRestaurants) {
                 if travelTime < smallestTravelTime {
                     smallestTravelTime = travelTime
                 }
+                break
+            }
+            
+            if traveledRestaurants.count == numOfN {
+                break
+            }
+            
+            if travelTime > smallestTravelTime {
                 break
             }
 
@@ -169,21 +176,26 @@ func solution() {
             }
         }
     }
+    
     for restaurant in indexesOfM {
-        if paths[restaurant].count == 1 {
-            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
-        }
+        let emptySet: Set<Int> = []
+        findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
     }
-    for restaurant in indexesOfM {
-        if paths[restaurant].count == 2 {
-            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
-        }
-    }
-    for restaurant in indexesOfM {
-        if paths[restaurant].count > 2 {
-            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
-        }
-    }
+//    for restaurant in indexesOfM {
+//        if paths[restaurant].count == 1 {
+//            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
+//        }
+//    }
+//    for restaurant in indexesOfM {
+//        if paths[restaurant].count == 2 {
+//            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
+//        }
+//    }
+//    for restaurant in indexesOfM {
+//        if paths[restaurant].count > 2 {
+//            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
+//        }
+//    }
     
     print(smallestTravelTime)
 }
