@@ -170,8 +170,21 @@ func solution() {
         }
     }
     for restaurant in indexesOfM {
-        findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
+        if paths[restaurant].count == 1 {
+            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
+        }
     }
+    for restaurant in indexesOfM {
+        if paths[restaurant].count == 2 {
+            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
+        }
+    }
+    for restaurant in indexesOfM {
+        if paths[restaurant].count > 2 {
+            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
+        }
+    }
+    
     print(smallestTravelTime)
 }
 
