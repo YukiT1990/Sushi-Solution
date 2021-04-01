@@ -116,8 +116,6 @@ func solution() {
         paths[pathInput[1]!].append(pathInput[0]!)
     }
     
-    print(paths)
-    
     func findSmallestTravelTime(startRestaurant: Restaurant) {
         let q = Queue<Restaurant>()
         q.enqueue(item: startRestaurant)
@@ -132,7 +130,6 @@ func solution() {
             let travelTime = sq.travelTime
             traveledRestaurants.insert(number)
             numberOfTimesPassed[number] += 1
-            print(traveledRestaurants)
             
             if travelTime > smallestTravelTime {
                 break
@@ -143,7 +140,6 @@ func solution() {
             if containsAll(array: indexesOfM, set: traveledRestaurants) {
                 if travelTime < smallestTravelTime {
                     smallestTravelTime = travelTime
-                    print(smallestTravelTime)
                 }
                 break
             }
