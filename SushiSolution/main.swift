@@ -5,6 +5,22 @@
 //  Created by Yuki Tsukada on 2021/04/01.
 //
 
+// passed cases
+/*
+1 2 3 4 5 6 7 8 11
+sample1 sample 2
+ */
+
+// failed cases
+/*
+9(200) 10(158) 12(200) 13(200)
+ */
+
+// take too much memory/time
+/*
+14 and bigger numbers
+ */
+
 import Foundation
 
 public final class Queue<E> : Sequence {
@@ -115,8 +131,6 @@ func solution() {
         paths[pathInput[1]!].append(pathInput[0]!)
     }
     
-//    print(paths)
-    
     func findSmallestTravelTime(startRestaurant: Restaurant) {
         let q = Queue<Restaurant>()
         q.enqueue(item: startRestaurant)
@@ -132,10 +146,6 @@ func solution() {
             traveledRestaurants.insert(number)
             numberOfTimesPassed[number] += 1
             
-            
-            
-//            print("indexesOfM \(indexesOfM)")
-//            print("traveledRestaurants \(traveledRestaurants)")
             if containsAll(array: indexesOfM, set: traveledRestaurants) {
                 if travelTime < smallestTravelTime {
                     smallestTravelTime = travelTime
@@ -181,22 +191,6 @@ func solution() {
         let emptySet: Set<Int> = []
         findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
     }
-//    for restaurant in indexesOfM {
-//        if paths[restaurant].count == 1 {
-//            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
-//        }
-//    }
-//    for restaurant in indexesOfM {
-//        if paths[restaurant].count == 2 {
-//            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
-//        }
-//    }
-//    for restaurant in indexesOfM {
-//        if paths[restaurant].count > 2 {
-//            findSmallestTravelTime(startRestaurant: Restaurant(number: restaurant, previousRestaurant: -1, traveledRestaurants: emptySet, travelTime: 0))
-//        }
-//    }
-    
     print(smallestTravelTime)
 }
 
