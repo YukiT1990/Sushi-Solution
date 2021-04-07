@@ -123,12 +123,38 @@ func solution() {
     var smallestTravelTime = 2 * numOfN
     
     var paths = [[Int]](repeating: [Int](repeating: 0, count: 0), count: numOfN)
+    var pathsDict: [Int: [Int]] = [:]
     
     
     for _ in 1..<numOfN {
         let pathInput = readLine()!.split(separator: " ").map { Int($0) }
         paths[pathInput[0]!].append(pathInput[1]!)
         paths[pathInput[1]!].append(pathInput[0]!)
+    }
+    
+    var removedRestaurants: [Int] = []
+    var pathsWithoutFakeSushiRestaurant: [Int: [Int]] = [:]
+    for (index, path) in paths.enumerated() {
+        pathsDict[index] = path
+    }
+    
+    for (restaurantNumber, adjacentRestaurants) in pathsDict {
+        if adjacentRestaurants.count == 1 && !indexesOfM.contains(restaurantNumber) {
+            removedRestaurants.append(restaurantNumber)
+        } else {
+            pathsWithoutFakeSushiRestaurant[restaurantNumber] = adjacentRestaurants
+        }
+    }
+    
+    for (restaurantNumber, adjacentRestaurants) in pathsWithoutFakeSushiRestaurant {
+        var temp: [Int] = []
+        for adjacentReataurant in adjacentRestaurants {
+            if removedRestaurants.contains(adjacentReataurant) {
+                continue
+            }
+            temp.append(adjacentReataurant)
+        }
+        pathsWithoutFakeSushiRestaurant[restaurantNumber] = temp
     }
     
     func findSmallestTravelTime(startRestaurant: Restaurant) {
@@ -139,7 +165,7 @@ func solution() {
         while !q.isEmpty() {
             let sq = q.dequeue()!
             let number = sq.number
-            let adjacentRestaurants: [Int] = paths[number]
+            let adjacentRestaurants: [Int] = pathsWithoutFakeSushiRestaurant[number]!
             let previousReataurant: Int = sq.previousRestaurant
             var traveledRestaurants: Set<Int> = sq.traveledRestaurants
             let travelTime = sq.travelTime
@@ -179,7 +205,7 @@ func solution() {
                     }
                 }
 
-                if numberOfTimesPassed[adjacentRestaurantNumber] > paths[adjacentRestaurantNumber].count {
+                if numberOfTimesPassed[adjacentRestaurantNumber] > pathsWithoutFakeSushiRestaurant[adjacentRestaurantNumber]!.count {
                     continue
                 }
                 q.enqueue(item: Restaurant(number: adjacentRestaurantNumber, previousRestaurant: number, traveledRestaurants: traveledRestaurants, travelTime: travelTime + 1))
